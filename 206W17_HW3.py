@@ -3,23 +3,47 @@ import re
 
 ## SI 206 - W17 - HW3
 ## COMMENT WITH:
-## Your section day/time:
-## Any names of people you worked with on this assignment:
+## Your section day/time: Friday 1pm
+## Any names of people you worked with on this assignment: N/A
 
 #####################
 
 
 ## PART 1: 300 points
 
-## Use regular expressions to define a function called parse_counted_words which should accept a string, find strings of the form: <count> <word>  e.g. 101 Dalmations, inside it, and should return either the LAST correctly matching number-word combo in the string as a tuple, e.g. ('13', "pineapples"), if there are any such sub-strings, or None, if there are not.
-## The number in the <count> should be one or more digits only. The word should be made up of an optional non-alphabetic character followed by any number of alphabetic characters, upper or lower case.
+## Use regular expressions to define a function called parse_counted_words which should 
+#accept a string, find strings of the form: <count> <word>  e.g. 101 Dalmations, inside 
+#it, and should return either the LAST correctly matching number-word combo in the string 
+#as a tuple, e.g. ('13', "pineapples"), if there are any such sub-strings, or None, if 
+#there are not.
+
+## The number in the <count> should be one or more digits only. The word should be made up 
+#of an optional non-alphabetic character followed by any number of alphabetic characters, 
+#upper or lower case.
+
 ## HINT:  \b matches the beginning or end of a word
 ## HINT:  you can use the Python re .findall method to get multiple matches in a string
-#parse_counted_words('5 watermelons, 13 pineapples, and 1 papaya.') should return ('1', 'papaya')
+#parse_counted_words('5 watermelons, 13 pineapples, and 1 papaya.') should return 
+#('1', 'papaya')
 # parse_counted_words('101 dalmations!') should return ('101', 'dalmations') ...
 
 ## Write code to define your parse_counted_words function here.
-
+def parse_counted_words(astring):
+    x = re.findall(r'\b\d+.[^0-9]+[A-z]',astring)
+    listoflists = []
+    listoftuples = []
+    for y in x:
+        a = y.split()
+        listoflists.append(a)
+    for q in listoflists:
+        o = q[0]
+        f = q[1]
+        g = (o,f)
+        listoftuples.append(g)
+    try:
+        return listoftuples[-1]  
+    except:
+        return None           
 
 
 

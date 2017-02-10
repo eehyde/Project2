@@ -45,8 +45,16 @@ fileref.close()
 ## HINT: Remember that you'll need to open the file you created in Part 1, read the contets into one big string, and make a BeautifulSoup object out of that string!
 ## NOTE that the provided link does not include saving the online data in a file as part of the process. But it still provides very useful hints/tricks about how to look for and identify the headlines on the NY Times page.
 
+fileref = open("nytimes_data.html","r")
+text_from_file = fileref.read()
+soup = BeautifulSoup(text_from_file,'html.parser')
 
-
+all_headlines = [] 
+for story_heading in soup.find_all(class_="story-heading"): 
+	if story_heading.a: 
+		all_headlines.append(story_heading.a.text.replace("\n", " ").strip())
+nytimes_headlines = all_headlines[:10]
+print(nytimes_headlines)
 
 #####################
 
@@ -71,20 +79,17 @@ htmldoc = response.text
 soup = BeautifulSoup(htmldoc,"html.parser")
 people = soup.find_all("div",{"class":"views-row"})
 umsi_titles = {}
-
+for x in people:
+	names = x.find(property = "dc:title").text
+	positions = x.find(class_ = "field field-name-field-person-titles field-type-text field-label-hidden").text
+	umsi_titles[names] = positions
+print(umsi_titles)	
 ## It may be helpful to translate the following from English to code:
 
 ## For each element in the list saved in the variable people,
 ## Find the container that holds the name that belongs to that person (HINT: look for something unique, like a property element...)
 ## Find the container that holds the title that belongs to that person (HINT: a class name)
 ## Grab the text of each of those elements and put them in the dictionary umsi_titles properly
-
-
-
-
-
-
-
 
 
 

@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 
 ## SI 206 - W17 - HW4
 ## COMMENT WITH:
-## Your section day/time:
-## Any names of people you worked with on this assignment:
+## Your section day/time: Friday 1pm
+## Any names of people you worked with on this assignment: N/A
 
 #####################
 

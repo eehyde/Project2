@@ -3,6 +3,7 @@ import tweepy
 import requests
 import json
 import twitter_info
+from pprint import pprint
 
 ## SI 206 - W17 - HW5
 ## COMMENT WITH:
@@ -62,6 +63,36 @@ auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, parser=tweepy.parsers.JSONParser()) # Set up library to grab stuff from twitter with your authentication, and return it in a JSON-formatted way
 
 ## Write the rest of your code here!
+CACHE_FNAME = "cached_data_socialmedia.json"
+try:
+	cache_file = open(CACHE_FNAME,'r')
+	cache_contents = cache_file.read()
+	CACHE_DICTION = json.loads(cache_contents)
+except:
+	CACHE_DICTION = {}
+
+# Then you've got to do stuff in the function!
+def get_tweets_from_user(search):
+	unique_identifier = "twitter_{}".format(search) # seestring formatting chapter
+	# see if that username+twitter is in the cache diction!
+	if unique_identifier in CACHE_DICTION: # if it is...
+		print('using cached data to search for', search)
+		twitter_results = CACHE_DICTION[unique_identifier] # grab the data from the cache!
+		return twitter_results
+	else:
+		print('getting data from internet to search for', search)
+		results = api.search(q=search) # get it from the internet
+		# but also, save in the dictionary to cache it!
+		CACHE_DICTION[unique_identifier] = results # add it to the dictionary -- new key-val pair
+		# and then write the whole cache dictionary, now with new info added, to the file, so it'll be there even after your program closes!
+		f = open(CACHE_FNAME,'w') # open the cache file for writing
+		f.write(json.dumps(CACHE_DICTION)) # make the whole dictionary holding data and unique identifiers into a json-formatted string, and write that wholllle string to a file so you'll have it next time!
+		f.close()
+		return results
+
+user_input = input("Please input a value you would like to search for")
+results = get_tweets_from_user(user_input)
+pprint(results)
 
 #### Recommended order of tasks: ####
 ## 1. Set up the caching pattern start -- the dictionary and the try/except statement shown in class.

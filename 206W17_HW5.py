@@ -3,7 +3,6 @@ import tweepy
 import requests
 import json
 import twitter_info
-from pprint import pprint
 
 ## SI 206 - W17 - HW5
 ## COMMENT WITH:

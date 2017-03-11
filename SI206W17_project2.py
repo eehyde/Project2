@@ -33,8 +33,13 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 ## Part 0 -- CACHING SETUP
 
 ## Write the code to begin your caching pattern setup here.
-
-
+CACHE_FNAME = "206project2_caching.json"
+try:
+	cache_file = open(CACHE_FNAME,'r')
+	cache_contents = cache_file.read()
+	CACHE_DICTION = json.loads(cache_contents)
+except:
+	CACHE_DICTION = {}
 
 
 ## PART 1 - Define a function find_urls.
@@ -51,10 +56,6 @@ def find_urls(string):
 	return re.findall(regex,string)
 
 
-
-
-
-
 ## PART 2 (a) - Define a function called get_umsi_data.
 ## INPUT: N/A. No input.
 ## The function should check if there is any cached data for the UMSI directory in your cached file -- if so, return it, and if not, the function should access each page of the directory, get the HTML associated with it, append that HTML string to a list. The function should cache (save) that list when it is accumulated.
@@ -65,18 +66,27 @@ def find_urls(string):
 ## Start with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All  
 ## End with this page: https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page=11 
 
-
-
-
+base_urls = ["https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All"]
+for x in range(2,12):
+	a = "https://www.si.umich.edu/directory?field_person_firstname_value=&field_person_lastname_value=&rid=All&page={}".format(x)
+	base_urls.append(a)
+	x +=1
+for base_url in base_urls:
+	response = requests.get(base_url, headers={'User-Agent': 'SI_CLASS'})
+htmldoc = response.text
 
 
 
 ## PART 2 (b) - Create a dictionary saved in a variable umsi_titles 
 ## whose keys are UMSI people's names, and whose associated values are those people's titles, e.g. "PhD student" or "Associate Professor of Information"...
 
-
-
-
+soup = BeautifulSoup(htmldoc,"html.parser")
+people = soup.find_all("div",{"class":"views-row"})
+umsi_titles = {}
+for x in people:
+	names = x.find(property = "dc:title").text
+	positions = x.find(class_ = "field field-name-field-person-titles field-type-text field-label-hidden").text
+	umsi_titles[names] = positions
 
 
 

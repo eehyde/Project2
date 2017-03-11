@@ -10,6 +10,7 @@
 ###########
 
 ## Import statements
+import re
 import unittest
 import json
 import requests
@@ -45,6 +46,9 @@ api = tweepy.API(auth, parser=tweepy.parsers.JSONParser())
 ## find_urls("I love looking at websites like http://etsy.com and http://instagram.com and stuff") should return ["http://etsy.com","http://instagram.com"]
 ## find_urls("the internet is awesome #worldwideweb") should return [], empty list
 
+def find_urls(string):
+	regex = r"(http|https):\/\/[A-Z a-z 0-9]+\.+[A-Z a-z 0-9]{2,}.*"
+	return re.findall(regex,string)
 
 
 

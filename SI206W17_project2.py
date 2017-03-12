@@ -70,7 +70,6 @@ def find_urls(astring):
 def get_umsi_data():
 	unique_identifier = "umsi_directory_data" 
 	if unique_identifier in CACHE_DICTION: 
-		print('using cached data')
 		return CACHE_DICTION[unique_identifier]
 	else:
 		page_html = []
@@ -110,10 +109,8 @@ for x in people:
 def get_five_tweets(string):
 	unique_identifier = "twitter_University of Michigan" 
 	if unique_identifier in CACHE_DICTION: 
-		print('using cached data')
 		return CACHE_DICTION[unique_identifier]
 	else:
-		print('making a request to get the data')
 		results = api.search(string)
 		list_of_tweets = results['statuses'] 
 		tweets = []
@@ -135,8 +132,6 @@ for x in five_tweets:
 	a_url = find_urls(x)
 	for y in a_url:
 		tweet_urls_found.append(y)
-print(tweet_urls_found)
-
 
 
 

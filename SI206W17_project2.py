@@ -17,6 +17,7 @@ import requests
 import tweepy
 import twitter_info # Requires you to have a twitter_info file in this directory
 from bs4 import BeautifulSoup
+from pprint import pprint
 
 ## Tweepy authentication setup
 ## Fill these in in the twitter_info.py file
@@ -113,41 +114,28 @@ def get_five_tweets(string):
 		return CACHE_DICTION[unique_identifier]
 	else:
 		print('making a request to get the data')
-		results = api.search(q=string)
-		CACHE_DICTION[unique_identifier] = results
+		results = api.search(string)
+		list_of_tweets = results['statuses'] 
+		tweets = []
+		for x in list_of_tweets:
+			tweets.append(x['text'])
+		CACHE_DICTION[unique_identifier] = tweets[:5]
 		cached_data = open(CACHE_FNAME,'w')
 		cached_data.write(json.dumps(CACHE_DICTION)) 
-		return results			
-
-########## NEED TO BASICALLY COMBINE THESE TWO FUNCTIONS #################
-# def get_tweets_from_user(search):
-# 	unique_identifier = "twitter_{}".format(search) 
-# 	if unique_identifier in CACHE_DICTION: 
-# 		print('using cached data to search for', search)
-# 		twitter_results = CACHE_DICTION[unique_identifier] 
-# 		return twitter_results
-# 	else:
-# 		print('getting data from internet to search for', search)
-# 		results = api.search(q=search) 
-# 		CACHE_DICTION[unique_identifier] = results 
-# 		f = open(CACHE_FNAME,'w')
-# 		f.write(json.dumps(CACHE_DICTION)) 
-# 		return results
-
-# def get_five_tweets(string):
-# 	user_input = string
-# 	results = get_tweets_from_user(user_input)
-# 	list_of_tweets = results["statuses"]
-# 	three_tweets = list_of_tweets[:5]
-
+		cached_data.close()
+		return tweets[:5]
 
 ## PART 3 (b) - Write one line of code to invoke the get_five_tweets function with the phrase "University of Michigan" and save the result in a variable five_tweets.
 
 five_tweets = get_five_tweets("University of Michigan")
-print(five_tweets)
 
 ## PART 3 (c) - Iterate over the five_tweets list, invoke the find_urls function that you defined in Part 1 on each element of the list, and accumulate a new list of each of the total URLs in all five of those tweets in a variable called tweet_urls_found. 
-
+tweet_urls_found = []
+for x in five_tweets:
+	a_url = find_urls(x)
+	for y in a_url:
+		tweet_urls_found.append(y)
+print(tweet_urls_found)
 
 
 
